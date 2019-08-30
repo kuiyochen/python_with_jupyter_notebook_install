@@ -1,6 +1,9 @@
-# py -m PyInstaller xxx.py # <---------- convert py to exe
+# py -m PyInstaller --onefile python_with_jupyter_notebook_install.py # <---------- convert py to exe
+# py -m PyInstaller python_with_jupyter_notebook_install.py
 from tkinter import *
 import sys
+import win32com.client
+# import pythoncom
 import os
 import subprocess
 import string
@@ -197,15 +200,24 @@ try:
 			return shlex.split(command)[0]
 
 	def create_and_setting_jupyter_notebook_config(jupyter_default_folder_path):
+		global python_excute_code
 		try:
 			print("jupyter notebook --generate-config")
 			subprocess.call("jupyter notebook --generate-config")
-		except :
+		except:
 			try:
-				print(python_excute_code + "jupyter notebook --generate-config")
-				subprocess.call(python_excute_code + "jupyter notebook --generate-config")
+				print("notebook --generate-config")
+				subprocess.call("notebook --generate-config")
 			except:
-				print("jupyter notebook --generate-config fail")
+				try:
+					print(python_excute_code + "jupyter notebook --generate-config")
+					subprocess.call(python_excute_code + "jupyter notebook --generate-config")
+				except:
+					try:
+						print(python_excute_code + "notebook --generate-config")
+						subprocess.call(python_excute_code + "notebook --generate-config")
+					except:
+						print("jupyter notebook --generate-config fail")
 		Userprofile_path = os.environ['USERPROFILE']
 		jupyter_notebook_config_path = os.path.join(Userprofile_path, ".jupyter", "jupyter_notebook_config.py")
 		try:
@@ -229,6 +241,18 @@ try:
 		f.write(jupyter_notebook_config)
 		f.close()
 
+		Desktop_path = os.path.join(Userprofile_path, 'Desktop') # path to where you want to put the .lnk
+		path = os.path.join(Desktop_path, 'jupyter_notebook.lnk')
+		target = os.path.join(Userprofile_path, "AppData", "Local", "Programs", "Python", "Python36-32", "Scripts", "jupyter-notebook.exe")
+		# icon = r'C:\path\to\icon\resource.ico' # not needed, but nice
+
+		shell = win32com.client.Dispatch("WScript.Shell")
+		shortcut = shell.CreateShortCut(path)
+		shortcut.Targetpath = target
+		# shortcut.IconLocation = icon
+		shortcut.WindowStyle = 7 # 7 - Minimized, 3 - Maximized, 1 - Normal
+		shortcut.save()
+
 		# c.NotebookApp.notebook_dir = ''
 		# c.NotebookApp.notebook_dir = r''
 
@@ -237,6 +261,7 @@ try:
 		# import webbrowser
 		# webbrowser.register('chrome', None, webbrowser.GenericBrowser('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'))
 		# c.NotebookApp.browser = 'chrome'
+		# \Local\Programs\Python\Python36-32\Scripts
 	################## jupyter_notebook_config #######################
 
 	class endWindow(object):
@@ -262,6 +287,7 @@ try:
 	if __name__ == "__main__":
 		global packages_list, jupyter_default_folder_path
 		install_python358()
+		install_python358()
 		root = Tk()
 		m = mainWindow(root)
 		root.mainloop()
@@ -272,10 +298,10 @@ try:
 			print(jupyter_default_folder_path + "路徑不存在")
 			os.system("pause")
 			exit()
-		# upgrade_pip_and_install_jupyter()
+		upgrade_pip_and_install_jupyter()
 		# print(python_excute_code)
-		# packages_installing(packages_list)
-		# create_and_setting_jupyter_notebook_config(jupyter_default_folder_path)
+		packages_installing(packages_list)
+		create_and_setting_jupyter_notebook_config(jupyter_default_folder_path)
 		end_root = Tk()
 		end_m = endWindow(end_root)
 		end_root.mainloop()
@@ -297,13 +323,13 @@ except Exception as ex:
 # Userprofile_path = os.environ['USERPROFILE']
 # Desktop_path = os.path.join(Userprofile_path, 'Desktop') # path to where you want to put the .lnk
 # path = os.path.join(Desktop_path, 'jupyter_notebook.lnk')
-# target = r'C:\path\to\target\jupyter-notebook.py'
-# icon = r'C:\path\to\icon\resource.ico' # not needed, but nice
+# target = os.path.join(Userprofile_path, "Local", "Programs", "Python", "Python36-32", "Scripts", "jupyter-notebook.exe")
+# # icon = r'C:\path\to\icon\resource.ico' # not needed, but nice
 
 # shell = win32com.client.Dispatch("WScript.Shell")
 # shortcut = shell.CreateShortCut(path)
 # shortcut.Targetpath = target
-# shortcut.IconLocation = icon
+# # shortcut.IconLocation = icon
 # shortcut.WindowStyle = 7 # 7 - Minimized, 3 - Maximized, 1 - Normal
 # shortcut.save()
 ################## create_shortcut #######################
