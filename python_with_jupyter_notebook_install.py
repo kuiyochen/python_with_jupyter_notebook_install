@@ -230,13 +230,13 @@ try:
 		string_for_setting_dir = "c.NotebookApp.notebook_dir = r'"
 		string_for_setting_dir += jupyter_default_folder_path
 		string_for_setting_dir += "'"
-		jupyter_notebook_config = jupyter_notebook_config.replace("# c.NotebookApp.notebook_dir = ''", string_for_setting_dir)
+		jupyter_notebook_config = jupyter_notebook_config.replace("#c.NotebookApp.notebook_dir = ''", string_for_setting_dir)
 		string_for_setting_browser = "import webbrowser\n"
 		string_for_setting_browser += "webbrowser.register('chrome', None, webbrowser.GenericBrowser('"
 		string_for_setting_browser += get_default_windows_app(".html")
 		string_for_setting_browser += "'))\n"
 		string_for_setting_browser += "c.NotebookApp.browser = 'chrome'\n"
-		jupyter_notebook_config = jupyter_notebook_config.replace("# c.NotebookApp.browser = ''", string_for_setting_browser)
+		jupyter_notebook_config = jupyter_notebook_config.replace("#c.NotebookApp.browser = ''", string_for_setting_browser)
 		f = open(jupyter_notebook_config_path, "w")
 		f.write(jupyter_notebook_config)
 		f.close()
