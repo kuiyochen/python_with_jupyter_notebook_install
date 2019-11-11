@@ -1,0 +1,21 @@
+pip install --upgrade pip
+pip install -r requirements.txt
+
+ipython
+Keras
+matplotlib
+mayavi
+notebook
+ipython
+ipywidgets
+numpy
+opencv-python
+pandas
+pillow
+PyQt5
+scipy
+sklearn
+sympy
+tensorflow
+xlrd
+xlsxWriter
